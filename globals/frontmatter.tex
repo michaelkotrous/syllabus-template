@@ -1,0 +1,49 @@
+% format title on first page
+\makeatletter
+\ifdefempty{\sectionnum}{%
+\newcommand{\@course}{\coursenum~-- \coursename}
+}{%
+\newcommand{\@course}{\coursenum~\sectionnum~-- \coursename}
+}
+\newcommand{\@department}{\dept}
+\newcommand{\@semester}{\semester}
+\newcommand{\@brandmark}{\includegraphics[width=\brandmarkwidth, alt={{\institution}}]{../../globals/\brandmark}}
+
+\renewcommand{\maketitle}{%
+\begin{center}%
+    \@brandmark \\
+    \huge \@title \\
+    \LARGE \@course \\
+    \LARGE \@semester
+\end{center}
+}
+\makeatother
+
+% article metadata
+\ifdefempty{\sectionnum}{%
+    \hypersetup{
+        pdftitle   = {\coursenum~-- \coursename~Course Syllabus},
+        pdfauthor  = {Michael Kotrous}
+    }
+}{%
+    \hypersetup{
+        pdftitle   = {\coursenum~\sectionnum~-- \coursename~Course Syllabus},
+        pdfauthor  = {Michael Kotrous}
+    }
+}
+\title{Course Syllabus}
+\author{Michael Kotrous}
+\date{\semester}
+
+% format header for pages 2+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+% header
+\lhead{\profname} 
+\chead{\coursenum~\sectionnum~-- \coursename}
+\rhead{\semester}
+% footer
+\lfoot{}
+\cfoot{\thepage}
+\rfoot{}
+

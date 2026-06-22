@@ -1,0 +1,140 @@
+\DocumentMetadata{
+    pdfstandard=ua-2,
+    lang=en-US,
+    tagging=on,
+    tagging-setup={math/setup=mathml-SE}
+}
+\documentclass[11pt]{article}
+
+\input{../../globals/uga/institution}
+\input{../../globals/uga/instructor}
+
+\input{../../globals/preamble}
+
+% course term
+\def\semester{Summer 2024}
+
+% course catalog information
+% refer to UGA Bulletin: https://bulletin.uga.edu/coursesNew (ECON 2105)
+\def\coursenum{ECON 2105}
+\def\sectionnum{}
+\def\coursename{Principles of Macroeconomics}
+\def\credithours{3}
+\def\callnumber{72321}
+\def\prereq{None}
+\def\coreq{None}
+\def\crosslisted{}
+\def\equivalent{Not open to students with credit in ECON 2105E or ECON 2105H}
+
+% meeting information
+\def\location{Ivester Hall, Room E101}
+\def\classtimes{Monday--Friday, 9:30 a.m. -- 12:00 p.m.}
+
+% course textbook
+\def\textbooktitle{\emph{Modern Principles: Macroeconomics}}
+\def\textbookauthorlabel{Authors:}
+\def\textbookauthorname{Tyler Cowen and Alex Tabarrok}
+\def\textbookpublisher{Macmillan Learning}
+\def\textbookedition{Sixth}
+\def\textbookformat{Achieve (digital)}
+\def\textbookisbn{9781319483203}
+
+\input{../../globals/frontmatter}
+
+\begin{document}
+\thispagestyle{empty}
+\maketitle
+
+\section*{Instructor Information}
+\begin{tabular}{@{}ll}
+Name:         &    \profname           \\
+Email:        &    \texttt{\profemail} {\small(Please begin your subject line with ``\coursenum'')}          \\
+\ifdefempty{\profoffice}{}{%
+Office:       & \profoffice \\
+}
+\ifdefempty{\profofficehours}{}{%
+Office Hours: & \profofficehours \\
+}
+Appointments: &    \profappointments \\
+Website:      &    \profwebsite            \\
+\end{tabular}
+
+\section*{Class Meeting Times}
+\begin{tabular}{@{}ll}
+Location:    &    \location           \\
+Time:        &    \classtimes          \\
+\end{tabular}
+
+\subsection*{Attendance Policy}
+\input{includes/attendance}
+
+\section*{Course Description \& Details} 
+\input{includes/coursedesc_catalog}
+
+\subsection*{Topics}
+\input{includes/coursedesc_topics}
+
+\subsection*{Learning Outcomes}
+\input{includes/coursedesc_learningoutcomes}
+
+\subsection*{General Education Core}
+\input{includes/coursedesc_gened}
+
+\subsection*{Course Details}
+\begin{tabular}{@{}ll}
+\ifdefempty{\callnumber}{}{%
+Course \#:            &    \callnumber       \\
+}
+Credit Hours:         &    \credithours      \\
+Prerequisites:        &    \prereq           \\
+Corequisites:         &    \coreq            \\
+\ifdefempty{\crosslisted}{}{%
+Cross-listed as:      &    \crosslisted      \\
+}
+\ifdefempty{\equivalent}{}{%
+Equivalent Courses:   &    \equivalent       \\
+}
+\end{tabular}
+
+\section*{Course Materials}
+\subsection*{Textbook}
+\begin{tabular}{@{}ll}
+Title:   & \textbooktitle \\
+\textbookauthorlabel  & \textbookauthorname \\
+Publisher: & \textbookpublisher \\
+Edition: & \textbookedition \\
+Format:  & \textbookformat \\
+ISBN:    & \textbookisbn \\
+\end{tabular}
+
+\input{includes/materials}
+
+\section*{Grading}
+\input{includes/grading}
+
+\section*{Tentative Course Schedule}
+\input{includes/schedule}
+
+\section*{Course Statements \& Policies}
+
+\subsection*{Academic Honesty \& Artificial Intelligence (AI) Policy}
+\input{../../globals/uga/statements/academichonesty}
+
+\subsection*{AI Literacy Resources}
+\input{../../globals/uga/statements/resources_ai}
+
+\subsection*{Accommodation for Disabilities}
+\input{../../globals/uga/statements/accommodation}
+
+\subsection*{UGA Well-Being Resources}
+\input{../../globals/uga/statements/resource_wellbeing}
+
+\subsection*{Student Success Resources}
+\input{../../globals/uga/statements/resource_success}
+
+\subsection*{Disclaimer}
+\input{../../globals/uga/statements/disclaimer}
+
+\end{document}
+
+

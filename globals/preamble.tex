@@ -1,0 +1,215 @@
+% indicator to skip certain packages when converting to HTML5 / ePub
+\newif\ifnotlatexml
+\ifdefined\latexml
+  \notlatexmlfalse
+\else
+  \notlatexmltrue
+\fi
+
+% set page margins
+\usepackage[margin=1in]{geometry}
+
+% configure fonts for PDF exports
+\ifnotlatexml
+\usepackage{fontspec}
+\setmainfont{Source Serif 4}[
+    UprightFont = * Regular,
+    ItalicFont = * Italic,
+    BoldFont = * Semibold,
+    BoldItalicFont = * Semibold Italic
+]
+\setsansfont{Source Sans 3}[
+    UprightFont = * Regular,
+    ItalicFont = * Italic,
+    BoldFont = * Semibold,
+    BoldItalicFont = * Semibold Italic
+]
+\setmonofont{Source Code Pro}[
+  UprightFont = * Regular,
+  ItalicFont = * Italic,
+  BoldFont = * Semibold,
+  BoldItalicFont = * Semibold Italic
+]
+\fi
+
+% format text spacing
+\usepackage{setspace}
+\setstretch{1.15}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+
+% prevent paragraph skip from adding extra space immediately after headings
+\makeatletter
+\g@addto@macro\@afterheading{\vspace{-\parskip}}
+\makeatother
+
+% custom colors
+\usepackage{xcolor}
+
+% define colorblind-friendly palette
+\definecolor{cb1}{HTML}{56B4E9}
+\definecolor{cb2}{HTML}{E69F00}
+\definecolor{cb3}{HTML}{009E73}
+\definecolor{cb4}{HTML}{0072B2}
+\definecolor{cb5}{HTML}{D55E00}
+\definecolor{cb6}{HTML}{CC79A7}
+\definecolor{cb7}{HTML}{999999}
+\definecolor{cb8}{HTML}{F0E442}
+
+\definecolor{schoolcolorprimary}{HTML}{\brandhexprimary}
+\definecolor{schoolcolorsecondary}{HTML}{\brandhexsecondary}
+
+% format section headings
+\usepackage{titlesec}
+\titleformat{\section}
+  {\Large\bfseries\color{schoolcolorprimary}}
+  {\thesection.}
+  {0.5em}
+  {}
+  [{\color{schoolcolorsecondary}\titlerule[1pt]}]
+
+\titlespacing*{\section}
+  {0pt}  % left
+  {14pt} % before
+  {6pt}  % after
+
+% format subsection headings
+\titleformat{\subsection}
+  {\large\bfseries}
+  {\thesubsection.}
+  {0.5em}
+  {}
+
+\titlespacing*{\subsection}
+  {0pt}  % left
+  {9pt}  % before
+  {3pt}  % after
+
+\titleformat{\subsubsection}
+  {\large\itshape}
+  {\thesubsubsection.}
+  {0.5em}
+  {}
+
+\titlespacing*{\subsubsection}
+  {0pt}  % left
+  {3pt}  % before
+  {3pt}  % after
+
+% avoid "widowed" headings / subheadings
+\usepackage{needspace}
+
+\let\oldsection\section
+\renewcommand{\section}{\Needspace{5\baselineskip}\oldsection}
+
+\let\oldsubsection\subsection
+\renewcommand{\subsection}{\Needspace{3\baselineskip}\oldsubsection}
+
+% Adjust line spread and font family inside "pull quotes"
+\usepackage{csquotes}
+\newenvironment{pullquote}[1][]%
+  {\begin{displayquote}[#1]\sffamily}%
+  {\end{displayquote}}
+
+% write math and define operators
+\usepackage{mathtools}
+\ifnotlatexml
+\usepackage{unicode-math}
+\setmathfont{NewComputerModernMath}
+\setmathfont{NewComputerModernMath}[range=\mathbb]
+\newcommand{\indicator}{\mathbb{1}}
+\else
+\usepackage{amsfonts, amssymb, dsfont}
+\newcommand{\indicator}{\mathds{1}}
+\fi
+
+% images and figures
+\usepackage{graphicx, subcaption}
+
+% links
+\usepackage{hyperref}
+\definecolor{url}{HTML}{2a7f9e}
+\hypersetup{
+  colorlinks = true,
+  linkcolor = black,
+  filecolor = black,
+  urlcolor = url,
+  citecolor = url
+}
+
+% tables
+\usepackage{booktabs, longtable, threeparttable}
+\usepackage{lscape} % landscape tables
+\usepackage{array}
+\newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
+
+% conditional logic
+\usepackage{etoolbox}
+
+% nice enumerate environments in tagged PDFs
+\usepackage{enumitem}
+\usepackage{multicol}
+
+% configuring global itemize doesn't work when tagging,
+% so make "custom" environment first
+\newlist{ul}{itemize}{3}
+
+\setlist[ul,1]{
+  label=\textbullet,
+  topsep=2pt,
+  itemsep=1pt,
+  parsep=0pt,
+  partopsep=0pt,
+  leftmargin=2.5em
+}
+
+\setlist[ul,2]{
+  label=\textendash,
+  topsep=1pt,
+  itemsep=1pt,
+  parsep=0pt,
+  partopsep=0pt,
+  leftmargin=2.5em
+}
+
+\setlist[ul,3]{
+  label=\textasteriskcentered,
+  topsep=1pt,
+  itemsep=0pt,
+  parsep=0pt,
+  partopsep=0pt,
+  leftmargin=2.5em
+}
+
+% configuring global enumerate doesn't work when tagging,
+% so make "custom" environment first
+\newlist{ol}{enumerate}{3}
+
+\setlist[ol,1]{
+  label=\arabic*.,
+  topsep=3pt,
+  itemsep=2pt,
+  parsep=0pt,
+  partopsep=0pt,
+  leftmargin=2.5em
+}
+
+\setlist[ol,2]{
+  label=(\alph*),
+  topsep=2pt,
+  itemsep=1pt,
+  parsep=0pt,
+  partopsep=0pt,
+  leftmargin=2.5em
+}
+
+\setlist[ol,3]{
+  label=\roman*.,
+  topsep=1pt,
+  itemsep=0pt,
+  parsep=0pt,
+  partopsep=0pt,
+  leftmargin=2.5em
+}
+
+

@@ -1,10 +1,28 @@
-## Core LaTeX 
+# Ignore files in globals but files for generating sample syllabus
+globals/*
+!globals/frontmatter.tex
+!globals/preamble.tex
+!globals/uga/
+!globals/uga/*
+!globals/uga/statements/
+!globals/uga/statements/*
+
+# Ignore everything in courses but sample syllabus
+courses/*
+!courses/sample/
+!courses/sample/*
+!courses/sample/includes/
+!courses/sample/includes/*
+
+## Mac
+.DS_Store
+
+## Core LaTeX
 *.aux
+*.fdb_latexmk
+*.fls
 *.log
 *.out
 *.synctex.gz
-
-
-## Mac 
-.DS_Store
+*-mathml.html
 
