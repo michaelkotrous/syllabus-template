@@ -1,0 +1,19 @@
+# Normalize line endings across operating systems.
+# All text files are stored with LF in the repo and checked out with LF
+# on every platform (Windows, macOS, Linux), so line endings stay identical.
+* text=auto eol=lf
+
+# Source files (explicit, for clarity)
+*.tex   text eol=lf
+*.md    text eol=lf
+*.bib   text eol=lf
+LICENSE text eol=lf
+
+# Binary files — never touch their bytes
+*.pdf   binary
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.ttf   binary
+*.otf   binary
