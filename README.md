@@ -3,6 +3,8 @@
 Syllabus template in LaTeX.
 
 ![LaTeX](https://img.shields.io/badge/LaTeX%20Template-008080?logo=latex)
+![Open Source](https://img.shields.io/badge/Open-Source-green)
+
 
 
 ## Course and Instructor Settings
