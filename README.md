@@ -9,9 +9,7 @@ Syllabus template in LaTeX.
 
 ## Course and Instructor Settings
 
-In the [configs.tex](configs.tex) file, edit the course and instructor parameters.  
-The course parameters include semester/year, course number, course name, credit hours, call number, prerequisites, class day(s)/time/location, and textbook. 
-The instructor parameters are name, contact information, office location, and hours.   In particular, 
+In the [configs.tex](configs.tex) file, edit the course and instructor parameters.  The course parameters include semester/year, course number, course name, credit hours, call number, prerequisites, class day(s)/time/location, and textbook. The instructor parameters are name, contact information, office location, and hours.   In particular, 
 
 ```tex
 % DEPARTMENT
@@ -43,8 +41,7 @@ More sections can be added to [syllabus.tex](syllabus.tex) as needed.
 
 
 ## Global Directory
-Files in the `common` (global) directory are university-wide policies or files common to *all* your syllabi (assuming >1 teaching load). 
-Add files as needed and include them in [syllabus.tex](syllabus.tex).  Note: The directory named `global` gives errors in TeXLive 2020.
+Files in the `common` (global) directory are university-wide policies or files common to *all* your syllabi (assuming >1 teaching load). Add files as needed and include them in [syllabus.tex](syllabus.tex).  Note: The directory named `global` gives errors in TeXLive 2020.
 
 
 ## Local Files
@@ -55,8 +52,7 @@ You may also add files as needed in the local directory, then include them in th
 
 ## Logo
 
-Replace `assests/logo.png` with your logo of (approximate) size 130 x 20.  
-If the logo is not that size, you may either resize or scale in the code,
+Replace `assests/logo.png` with your logo of (approximate) size 130 x 20. If the logo is not that size, you may either resize or scale in the code,
 
 ```
 \title{\includegraphics[scale=1.0]{assets/logo.png}}
