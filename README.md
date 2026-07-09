@@ -2,6 +2,8 @@
 
 Syllabus template in LaTeX.
 
+![LaTeX](https://img.shields.io/badge/LaTeX%20Template-008080?logo=latex)
+
 
 ## Course and Instructor Settings
 
