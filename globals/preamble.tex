@@ -7,7 +7,7 @@
 \fi
 
 % set page margins
-\usepackage[margin=1in]{geometry}
+\usepackage[left=1.25in, right=1.25in, top=1in, bottom=1.15in]{geometry}
 
 % configure fonts for PDF exports
 \ifnotlatexml
@@ -32,16 +32,33 @@
 ]
 \fi
 
+% micro-typography: character protrusion and font expansion. Noticeably
+% improves justified text by reducing loose lines and rivers.
+\ifnotlatexml
+\usepackage{microtype}
+\fi
+
 % format text spacing
 \usepackage{setspace}
-\setstretch{1.15}
+\setstretch{1.1}
 \setlength{\parindent}{0pt}
-\setlength{\parskip}{6pt}
+% rubber, not rigid: gives the page-breaking algorithm room to flex the gap
+% between paragraphs rather than stranding a lone line at a page boundary
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+
+% discourage widows (lone line at the top of a page) and orphans (lone line at
+% the bottom). If pages start coming out noticeably short, lower these to ~4000.
+\widowpenalty=10000
+\clubpenalty=10000
 
 % prevent paragraph skip from adding extra space immediately after headings
 \makeatletter
 \g@addto@macro\@afterheading{\vspace{-\parskip}}
 \makeatother
+
+% conditional logic --- loaded early because the colour block below needs
+% \ifdefempty to treat the secondary brand colour as optional
+\usepackage{etoolbox}
 
 % custom colors
 \usepackage{xcolor}
@@ -57,44 +74,70 @@
 \definecolor{cb8}{HTML}{F0E442}
 
 \definecolor{schoolcolorprimary}{HTML}{\brandhexprimary}
-\definecolor{schoolcolorsecondary}{HTML}{\brandhexsecondary}
 
-% format section headings
+% Two brand colours, one job each:
+%   schoolcolorprimary   -> section heading text
+%   schoolcolorsecondary -> the rule beneath section headings
+%
+% The secondary is OPTIONAL. Institutions built on a single mark may leave
+% \brandhexsecondary empty, in which case it aliases the primary and the rule
+% matches the heading text. Guarding this matters: \definecolor{...}{HTML}{}
+% on an empty value is a compile error, not a silent no-op.
+\ifdefempty{\brandhexsecondary}{%
+  \colorlet{schoolcolorsecondary}{schoolcolorprimary}%
+}{%
+  \definecolor{schoolcolorsecondary}{HTML}{\brandhexsecondary}%
+}
+
+% Format section headings.
+%
+% Headings are set in the sans family (Source Sans 3) against the serif body
+% (Source Serif 4). The family shift carries most of the hierarchy, which lets
+% the size ramp stay modest at a 10pt base: 14.4 / 12 / 10pt.
+%
+% Note \bfseries maps to Source Sans 3 *Semibold*, not a true Bold, so these
+% read as authoritative rather than heavy.
+%
+% The label argument is {} because every heading in this system is starred
+% (\section*). Restore {\thesection.} if numbered headings are ever wanted.
 \usepackage{titlesec}
 \titleformat{\section}
-  {\Large\bfseries\color{schoolcolorprimary}}
-  {\thesection.}
+  {\Large\sffamily\bfseries\color{schoolcolorprimary}}
+  {}
   {0.5em}
   {}
-  [{\color{schoolcolorsecondary}\titlerule[1pt]}]
+  [{\color{schoolcolorsecondary}\titlerule[0.4pt]}]
 
 \titlespacing*{\section}
   {0pt}  % left
-  {14pt} % before
+  {3pt} % before
   {6pt}  % after
 
 % format subsection headings
 \titleformat{\subsection}
-  {\large\bfseries}
-  {\thesubsection.}
+  {\large\sffamily\bfseries}
+  {}
   {0.5em}
   {}
 
 \titlespacing*{\subsection}
   {0pt}  % left
-  {9pt}  % before
-  {3pt}  % after
+  {2pt}  % before
+  {2pt}  % after
 
+% Subsubsections sit at body size, so the serif/sans contrast alone has to
+% carry the level --- which it does more reliably than the previous serif
+% italic, which disappeared into the surrounding text at 10pt.
 \titleformat{\subsubsection}
-  {\large\itshape}
-  {\thesubsubsection.}
+  {\normalsize\sffamily\bfseries}
+  {}
   {0.5em}
   {}
 
 \titlespacing*{\subsubsection}
   {0pt}  % left
-  {3pt}  % before
-  {3pt}  % after
+  {2pt}  % before
+  {0pt}  % after
 
 % avoid "widowed" headings / subheadings
 \usepackage{needspace}
@@ -128,7 +171,20 @@
 
 % links
 \usepackage{hyperref}
-\definecolor{url}{HTML}{2a7f9e}
+% Link colour has to satisfy two requirements that pull in opposite directions:
+%
+%   vs. the white background : >= 4.5:1 (WCAG AA, body-size text) -> wants dark
+%   vs. the black body text  : >= 3.0:1 (WCAG 1.4.1, which applies because
+%                              colour is the only cue distinguishing a link
+%                              here --- colorlinks adds no underline) -> wants light
+%
+% Together these confine luminance to roughly [0.100, 0.183]. 25708A sits mid-band
+% at 5.58:1 against white and 3.76:1 against black, clearing both with real margin.
+%
+% For reference: 2A7F9E passed white by only 0.04; 1F6478 passed black by only
+% 0.15; and 1A5A6B, which would have reached AAA against white, FAILS against
+% black at 2.72:1 --- chasing AAA on the background breaks link legibility.
+\definecolor{url}{HTML}{25708A}
 \hypersetup{
   colorlinks = true,
   linkcolor = black,
@@ -143,8 +199,46 @@
 \usepackage{array}
 \newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
 
-% conditional logic
-\usepackage{etoolbox}
+% Aligned label/value blocks (Instructor Information, Class Meeting Times,
+% Course Details, ...). Each of these used its own tabular{@{}ll}, so every
+% block sized its label column independently and the value columns started at
+% a different horizontal position down the page. A shared fixed label width
+% lines them all up.
+%
+% \deflabelwidth is sized for the longest label in the system, "Equivalent
+% Courses:". Shorten it if a given institution's labels are all brief.
+%
+% The value column is a wrapping p-column spanning the rest of the measure, so
+% long values (e.g. the email line with its subject-line note) reflow instead
+% of running into the right margin.
+\newlength{\deflabelwidth}
+\setlength{\deflabelwidth}{1.15in}
+\newenvironment{deftable}{%
+  \begin{tabular}{@{}%
+    >{\raggedright\arraybackslash}p{\deflabelwidth}%
+    >{\raggedright\arraybackslash}p{\dimexpr\linewidth-\deflabelwidth-2\tabcolsep\relax}%
+    @{}}%
+}{%
+  \end{tabular}%
+}
+
+% Keep a lead-in sentence with the centred block it introduces.
+%
+% \widowpenalty and \clubpenalty cannot do this: they only govern breaks
+% *within* a paragraph, so a one-line lead-in ("...using the following scale:")
+% has no internal break to protect and gets stranded at the foot of a page
+% while its table moves to the next.
+%
+% Forbidding the break immediately before every centred block forces TeX to
+% break at the previous legal point instead --- i.e. before the lead-in --- so
+% sentence and table travel together. No markup needed in the document source.
+%
+% If a centred block ever grows taller than a page, soften [4] to [3], which
+% strongly discourages rather than forbids.
+%
+% Display math needs no equivalent: TeX's \predisplaypenalty already defaults
+% to 10000, so a break just before \[ ... \] is forbidden out of the box.
+\BeforeBeginEnvironment{center}{\par\nopagebreak[4]}
 
 % nice enumerate environments in tagged PDFs
 \usepackage{enumitem}
